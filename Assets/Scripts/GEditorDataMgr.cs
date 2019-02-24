@@ -412,7 +412,12 @@ public class GEditorDataMgr{
 
 		//开始过滤并,返回过滤后要存储的二进制数据
 		byte[] bs = GEditorConfig.FilterData(editorType,_kvContainer.KVDateDic);
-        Debug.Log("TExportData------->bs.len:"+bs.Length);
+
+		if (null == bs) {
+			Debug.Log ("未导出 editorType:"+editorType+" 原因数据为null");
+			return;
+		}
+        //Debug.Log("TExportData------->bs.len:"+bs.Length);
 		//ioBuffer4GameData.PutString(editorType);//存储tab名
 		//ioBuffer4GameData.PutInt(_treeContainer.RootFolder.SubAllItemNums);//存储当前tab下数据总条数
 

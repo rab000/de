@@ -106,6 +106,7 @@ public class GEditorConfig{
 	}
 
 	public static byte[] FilterData(string editorType,Dictionary<string,Dictionary<int,KVData>> orignalData){
+		Debug.Log ("GEditorConfig.FilterData-->editorType:"+editorType);
 		switch(editorType)
 		{
 		case "skill":

@@ -667,7 +667,7 @@ public class ActiveSkillDataTemplate
                 dic = ProcessDefaultDropdownData(ContentDropdownData_TargetType);
                 break;
             case "artRes_AnimResID":
-                dic = ProcessArtResDropdownData(GEditorEnum.EDITOR_ART_RES_ROOTURL + "role/");
+                dic = ProcessArtResDropdownData(GEditorEnum.EDITOR_ART_RES_ROOTURL + "re/");
                 break;
             case "default_MotionType":
                 dic = ProcessDefaultDropdownData(ContentDropdownData_MotionType);
@@ -746,7 +746,9 @@ public class ActiveSkillDataTemplate
         Dictionary<string, string> dic = new Dictionary<string, string>();
 
 		//获取当前目录artResFolderURL下所有文件的绝对路径
-        string[] urls = Directory.GetFiles(artResFolderURL);
+        //string[] urls = Directory.GetFiles(artResFolderURL);
+
+		string[] urls = FileHelper.FindAllFileURLs (artResFolderURL);
 
         for (int i = 0; i < urls.Length; i++)
         {

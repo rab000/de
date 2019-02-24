@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using System.Collections.Generic;
 
 public class FileHelper{
 
@@ -93,5 +94,33 @@ public class FileHelper{
             }
         }
     }
+		
+	/// <summary>
+	/// 查找目录下所有文件
+	/// 输出目录eg:Assets/NEditor/RoleEditor/Res/Female/Materials\female_top-2_orange.mat
+	/// </summary>
+	/// <returns>The all files.</returns>
+	/// <param name="folderPath">文件夹目录，eg:Assets/NEditor/RoleEditor/Res/Female/Materials</param>
+	public static string[] FindAllFileURLs(string folderPath) {
+
+		string[] fileURLs = Directory.GetFiles(folderPath,"*",SearchOption.AllDirectories);//注意这里要排除meta文件
+
+		List<string> filsList = new List<string>();
+		for (int i = 0; i < fileURLs.Length; i++) 
+		{
+			
+
+			//避免找到无用的.meta文件
+			if (fileURLs [i].Contains (".meta"))continue;
+
+			string s = fileURLs [i].Replace ("\\","/");
+
+			Debug.Log("查找目录"+folderPath+"下后文件"+i+"->"+fileURLs[i]+" 转换后文件:"+s);
+
+			filsList.Add (s);
+
+		}
+		return filsList.ToArray();
+	}
 
 }
