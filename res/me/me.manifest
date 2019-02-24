@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 107236190
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: objs/tower.n
+      Dependencies: {}
+    Info_1:
+      Name: map/mapname_t1/building.n
+      Dependencies: {}
+    Info_2:
+      Name: map/mapname_t1/eff.n
+      Dependencies: {}
+    Info_3:
+      Name: map/mapname_t1/obj.n
+      Dependencies: {}
+    Info_4:
+      Name: map/mapname_t1/terrain.n
+      Dependencies: {}
+    Info_5:
+      Name: scn/scntype3c/scnname_t1/scndata.n
+      Dependencies: {}

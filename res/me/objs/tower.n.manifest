@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 4106646536
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d9b460ac0899d7a6d697089f3c02e9bf
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f3af07ee01f77e0473d82a444235ecb3
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: b9e2cd978774b4e81a278794a2e6d4d1, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/me/Resources/res/objs/tower.prefab
+Dependencies: []

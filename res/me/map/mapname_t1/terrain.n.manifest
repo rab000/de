@@ -1,0 +1,40 @@
+ManifestFileVersion: 0
+CRC: 2055271734
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 13e96e6581db65226da5db947ab25037
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 376aaa8f74d3487dc2fb40cd51c38c99
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6e038bf700cfa444fb16c6ef963be9f9, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 115dfe7b0938447cbbf9507076f54049, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/me/Resources/res/map/mapname_t1/terrain.prefab
+Dependencies: []

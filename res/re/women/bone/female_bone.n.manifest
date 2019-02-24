@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 3410853042
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 33a2c81c03158894c5809b3cfdec0df8
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: cca9f12ca3e234535d395aff86a4d296
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+Assets:
+- Assets/Asset4Build/women/bone/bone.prefab
+Dependencies: []

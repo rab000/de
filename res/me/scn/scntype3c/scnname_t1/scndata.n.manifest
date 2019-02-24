@@ -1,0 +1,18 @@
+ManifestFileVersion: 0
+CRC: 1912393325
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d957940415bb1ca61952352eef137e5a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 21873df919f7914ecf948d53b41123ce
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: 7a08a651a2b2d4b4f9f88d344428d3a1, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/me/Resources/res/scn/scntype3c/scnname_t1/scnData.asset
+Dependencies: []
