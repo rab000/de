@@ -123,4 +123,27 @@ public class FileHelper{
 		return filsList.ToArray();
 	}
 
+    /// <summary>
+    /// file copy
+    /// </summary>
+    /// <param name="_Src_Path"></param>
+    /// <param name="_Target_Path"></param>
+    /// <param name="_Imperative"> 如果目标文件是否先删除再copy</param>
+    public static void CopyFile(string _Src_Path, string _Target_Path, bool _Imperative = false)
+    {
+        if (_Imperative)
+        {
+            if (File.Exists(_Target_Path))
+            {
+                File.Delete(_Target_Path);
+            }
+        }
+        if (File.Exists(_Src_Path))
+            File.Copy(_Src_Path, _Target_Path);
+        else
+        {
+            Debug.LogError("拷贝文件出错");
+        }
+    }
+
 }

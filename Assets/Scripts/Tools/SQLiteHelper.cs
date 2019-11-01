@@ -2,6 +2,7 @@
 using System.Collections;
 using Mono.Data.Sqlite;
 using System;
+using System.Text;
 
 /// <summary>
 /// 这个类只跟sql相关，不要做其他跟非sql逻辑相关的操作
@@ -13,6 +14,8 @@ public class SQLiteHelper
     #region base
 
     static string _connectionString;
+
+    private static StringBuilder SB = new StringBuilder();
 
     /// <summary>
     /// 数据库连接定义
@@ -103,81 +106,6 @@ public class SQLiteHelper
         return dataReader;
     }
 
-    /// <summary>
-    /// 连接sql,执行SQL命令,返回查询结果,然后立刻关闭连接
-    /// </summary>
-    /// <returns>The query.</returns>
-    /// <param name="queryString">SQL命令字符串</param>
-    public SqliteDataReader ExecuteQueryOnce(string queryString, out SqliteConnection conn, out SqliteCommand cmd)
-    {
-        SqliteConnection connection = new SqliteConnection(_connectionString);
-        conn = connection;
-        using (cmd = new SqliteCommand(queryString, connection))
-        {
-            try
-            {
-                connection.Open();
-                var r = cmd.ExecuteReader();
-                return r;
-            }
-            catch
-            {
-                connection.Close();
-                connection.Dispose();
-                return null;
-            }
-        }
-    }
-
-    /// <summary>
-    /// 连接sql,执行SQL命令,不返回查询结果,然后立刻关闭连接
-    /// 事务概念
-    /// 事务（Transaction）是指一个或多个更改数据库的扩展。
-    /// 例如，如果您正在创建一个记录或者更新一个记录或者从表中删除一个记录，
-    /// 那么您正在该表上执行事务。
-    /// 重要的是要控制事务以确保数据的完整性和处理数据库错误。
-    /// 实际上，可以把许多的 SQLite查询联合成一组，把所有这些放在一起作为事务的一部分进行执行
-    /// </summary>
-    /// <param name="queryString"></param>
-    public void ExecuteNonQueryOnce(string queryString)
-    {
-        using (SqliteConnection conn = new SqliteConnection(_connectionString))
-        {
-            conn.Open();
-            SqliteCommand cmd = new SqliteCommand();
-            cmd.Connection = conn;
-
-            //开启事务
-            //事务通常会持续执行下去，直到遇到下一个 COMMIT 或 ROLLBACK 命令。
-            //不过在数据库关闭或发生错误时，事务处理也会回滚。
-            SqliteTransaction tx = conn.BeginTransaction();
-            cmd.Transaction = tx;
-            try
-            {
-                cmd.CommandText = queryString;
-                cmd.ExecuteNonQuery();
-                //提交(事务执行成功)
-                //COMMIT 命令是用于把事务调用的更改保存到数据库中的事务命令。
-                //命令把自上次 COMMIT 或 ROLLBACK 命令以来的所有事务保存到数据库。
-                tx.Commit();
-                tx.Dispose();
-                cmd.Dispose();
-                conn.Close();
-                conn.Dispose();
-
-            }
-            catch
-            {
-                //回滚(事务执行失败，不提交)
-                //ROLLBACK 命令是用于撤消尚未保存到数据库的事务的事务命令。
-                //命令只能用于撤销自上次发出 COMMIT 或 ROLLBACK 命令以来的事务。
-                tx.Rollback();
-
-                throw;
-            }
-        }
-    }
-
     #endregion
 
     #region table operate
@@ -202,7 +130,6 @@ public class SQLiteHelper
         //Debug.Log ("-->"+queryString);
         return ExecuteQuery(queryString);
     }
-
 
     /// <summary>
 	/// nafio info 暂时找不到好的方法查询表是否存在
@@ -407,7 +334,128 @@ public class SQLiteHelper
 
     #endregion
 
+    #region serch
 
+    /// <summary>
+    /// 表中是否存在id
+    /// </summary>
+    /// <param name="tableName"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public bool IsExistId(string tableName, int id)
+    {
+        //if (!connected_database)
+        //{
+        //    Debug.LogError("还没有初始化数据库");
+        //    return false;
+        //}
 
+        var table_name = tableName;
+        SB.Append("SELECT COUNT(*) FROM ");
+        SB.Append(table_name);
+        SB.Append(" WHERE Id = ");
+        SB.Append(id);
+        SqliteConnection conn;
+        SqliteCommand cmd;
+        SqliteDataReader reader = ExecuteQuery(SB.ToString());
+        var count = 0;
+        while (reader.Read())
+        {
+            count = reader.GetInt32(0);
+        }
+        SB.Clear();        
+        return count != 0;
+    }
+
+    #endregion
+
+    #region 不保持连接，用完即关闭
+
+    /// <summary>
+    /// 连接sql,执行SQL命令,返回查询结果,然后立刻关闭连接
+    /// </summary>
+    /// <returns>The query.</returns>
+    /// <param name="queryString">SQL命令字符串</param>
+    public SqliteDataReader ExecuteQueryOnce(string queryString, out SqliteConnection conn, out SqliteCommand cmd)
+    {
+        SqliteConnection connection = new SqliteConnection(_connectionString);
+        conn = connection;
+        using (cmd = new SqliteCommand(queryString, connection))
+        {
+            try
+            {
+                connection.Open();
+                var r = cmd.ExecuteReader();
+                return r;
+            }
+            catch
+            {
+                connection.Close();
+                connection.Dispose();
+                return null;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 连接sql,执行SQL命令,不返回查询结果,然后立刻关闭连接
+    /// 事务概念
+    /// 事务（Transaction）是指一个或多个更改数据库的扩展。
+    /// 例如，如果您正在创建一个记录或者更新一个记录或者从表中删除一个记录，
+    /// 那么您正在该表上执行事务。
+    /// 重要的是要控制事务以确保数据的完整性和处理数据库错误。
+    /// 实际上，可以把许多的 SQLite查询联合成一组，把所有这些放在一起作为事务的一部分进行执行
+    /// </summary>
+    /// <param name="queryString"></param>
+    public void ExecuteNonQueryOnce(string queryString)
+    {
+        using (SqliteConnection conn = new SqliteConnection(_connectionString))
+        {
+            conn.Open();
+            SqliteCommand cmd = new SqliteCommand();
+            cmd.Connection = conn;
+
+            //开启事务
+            //事务通常会持续执行下去，直到遇到下一个 COMMIT 或 ROLLBACK 命令。
+            //不过在数据库关闭或发生错误时，事务处理也会回滚。
+            SqliteTransaction tx = conn.BeginTransaction();
+            cmd.Transaction = tx;
+            try
+            {
+                cmd.CommandText = queryString;
+                cmd.ExecuteNonQuery();
+                //提交(事务执行成功)
+                //COMMIT 命令是用于把事务调用的更改保存到数据库中的事务命令。
+                //命令把自上次 COMMIT 或 ROLLBACK 命令以来的所有事务保存到数据库。
+                tx.Commit();
+                tx.Dispose();
+                cmd.Dispose();
+                conn.Close();
+                conn.Dispose();
+
+            }
+            catch
+            {
+                //回滚(事务执行失败，不提交)
+                //ROLLBACK 命令是用于撤消尚未保存到数据库的事务的事务命令。
+                //命令只能用于撤销自上次发出 COMMIT 或 ROLLBACK 命令以来的事务。
+                tx.Rollback();
+
+                throw;
+            }
+        }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 将DB从持久化目录拷贝到沙盒
+    /// </summary>
+    public void CopyDb()
+    {
+        var src_path = Application.streamingAssetsPath + "/const.db";
+        var target_path = Application.persistentDataPath + "/const.db";
+        FileHelper.CopyFile(src_path, target_path, true);
+    }
 
 }
