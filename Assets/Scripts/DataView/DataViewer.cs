@@ -8,25 +8,34 @@ using System.Text;
 /// 数据查看器
 /// 把二进制数据
 /// </summary>
-public class DataViewer : MonoBehaviour {
-	bool BeTest = false;
+public class DataViewer : MonoBehaviour
+{
+    bool BeTest = false;
     /// <summary>
     /// 输入二进制文件路径
     /// </summary>
-    string InputURL = @"C:\root\work\svnWorkspace\DateEditor\trunk\data\game\skill.gdata";
+    /// 
+    static string InputURL
+    {
+        get
+        {
+            return @"C:\root\work\gitspace\de\data\game\skill.gdata";
+        }
+    }
 
     /// <summary>
     /// 输出铭文.txt文件路径
     /// </summary>
     string OutputURL = @"d:\test.txt";
 
-	void Start () {
+    void Start()
+    {
 
         if (FileHelper.BeFileExists(OutputURL))
         {
             File.Delete(OutputURL);
         }
-       
+
         byte[] bs = FileHelper.Get(InputURL);
 
         Log.i("bs.len:" + bs.Length);
@@ -35,34 +44,38 @@ public class DataViewer : MonoBehaviour {
 
         buffer.PutBytes(bs);
 
-		int dataNum = buffer.GetInt();
+        int dataNum = buffer.GetInt();
 
-		FileHelper.WriteMessage(OutputURL, "数据条数:" + dataNum);
+        FileHelper.WriteMessage(OutputURL, "数据条数:" + dataNum);
 
         do
         {
-			if(BeTest){
-            string key = buffer.GetString();//key
+            if (BeTest)
+            {
+                string key = buffer.GetString();//key
 
-            //这句代表一个treeItem的开头
-            if (key.Equals("ID")){
-                FileHelper.WriteMessage(OutputURL, "----------------分割线---------------");
+                //这句代表一个treeItem的开头
+                if (key.Equals("ID"))
+                {
+                    FileHelper.WriteMessage(OutputURL, "----------------分割线---------------");
+                }
+                string value = buffer.GetString();//value
+                string type = buffer.GetString();//type
+                string s = "[" + key + "][" + value + "][" + type + "]";
+                FileHelper.WriteMessage(OutputURL, s);
             }
-				string value = buffer.GetString();//value
-				string type = buffer.GetString();//type
-				string s = "["+key + "][" + value + "][" + type+"]";
-				FileHelper.WriteMessage(OutputURL, s);
-			}else{
-				string value1 = buffer.GetString();
-				FileHelper.WriteMessage(OutputURL, value1);
-			}
-            
+            else
+            {
+                string value1 = buffer.GetString();
+                FileHelper.WriteMessage(OutputURL, value1);
+            }
+
 
         }
         while (buffer.HasData());
-       
+
         Log.i("数据查看器生成数据完毕");
-        
+
     }
 
 
